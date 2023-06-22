@@ -2,19 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class NonBorderTextField extends StatelessWidget {
-  final TextEditingController controller;
+  final void Function(String)? onChange;
+  final TextEditingController? controller;
   final TextInputFormatter? formatter;
-  final TextInputType textInputType;
+  final TextInputType? textInputType;
   final int? maxLength;
-  final String hint;
-  final List<String> erros;
+  final String? hint;
+  final List<String>? erros;
 
   const NonBorderTextField({
     super.key,
-    required this.controller,
-    required this.erros,
-    required this.hint,
-    required this.textInputType,
+    this.controller,
+    this.erros,
+    this.hint,
+    this.textInputType,
+    this.onChange,
     this.formatter,
     this.maxLength,
   });
@@ -31,6 +33,8 @@ class NonBorderTextField extends StatelessWidget {
             color: Colors.grey[300],
           ),
           child: TextFormField(
+            controller: controller,
+            onChanged: onChange,
             maxLength: maxLength,
             keyboardType: textInputType,
             inputFormatters: [if (formatter != null) formatter!],
@@ -42,7 +46,7 @@ class NonBorderTextField extends StatelessWidget {
             ),
           ),
         ),
-        if (erros.isNotEmpty) _Errors(erros: erros)
+        if ((erros ?? []).isNotEmpty) _Errors(erros: erros!)
       ],
     );
   }

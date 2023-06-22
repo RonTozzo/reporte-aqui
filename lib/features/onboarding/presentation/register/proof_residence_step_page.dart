@@ -1,7 +1,8 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:reporte_aqui/shared/app_bar.dart';
-import 'package:reporte_aqui/shared/button.dart';
+import 'package:reporte_aqui/shared/presentation/app_bar.dart';
+import 'package:reporte_aqui/shared/presentation/button.dart';
+import 'package:reporte_aqui/shared/routes/app_routes.dart';
 
 class ProfResidenceStepPage extends StatefulWidget {
   const ProfResidenceStepPage({super.key});
@@ -11,6 +12,10 @@ class ProfResidenceStepPage extends StatefulWidget {
 }
 
 class _ProfResidenceStepPageState extends State<ProfResidenceStepPage> {
+  bool isDisabled = true;
+  Color? fieldColor;
+  String fieldText =
+      "Selecione o arquivo referente ao seu comprovante de renda";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +30,7 @@ class _ProfResidenceStepPageState extends State<ProfResidenceStepPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                "Agora por favor, adicione seu Comprovante de Residencia clicando abaixo",
+                "Adicione aqui o seu comprovante de renda",
                 style: TextStyle(
                   fontSize: 22,
                   color: Colors.black,
@@ -33,11 +38,18 @@ class _ProfResidenceStepPageState extends State<ProfResidenceStepPage> {
                 ),
               ),
               const SizedBox(height: 24),
-              const _SelectFileWidget(),
+              _SelectFileWidget(
+                color: fieldColor,
+                fileText: fieldText,
+                onFileSelected: _validateFile,
+              ),
               const Spacer(),
               Align(
                 child: AppButton(
-                  onTap: () {},
+                  isDisabled: isDisabled,
+                  onTap: () {
+                    Navigator.of(context).pushNamed(AppRoutes.home);
+                  },
                   label: "Próximo",
                 ),
               ),
@@ -48,10 +60,34 @@ class _ProfResidenceStepPageState extends State<ProfResidenceStepPage> {
       ),
     );
   }
+
+  void _validateFile(bool haveFile) {
+    if (haveFile) {
+      isDisabled = false;
+      fieldText = "Obrigado iremos avaliar seu comprovante de residencia";
+      fieldColor = Colors.green[100];
+    } else {
+      isDisabled = true;
+      fieldColor = null;
+      fieldText =
+          "Agora por favor, adicione seu Comprovante de Residencia clicando abaixo";
+    }
+
+    setState(() {});
+  }
 }
 
 class _SelectFileWidget extends StatelessWidget {
-  const _SelectFileWidget({super.key});
+  final Color? color;
+  final String fileText;
+  final Function(bool) onFileSelected;
+
+  const _SelectFileWidget({
+    super.key,
+    required this.onFileSelected,
+    required this.fileText,
+    this.color,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -61,19 +97,20 @@ class _SelectFileWidget extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
+          color: color,
           border: Border.all(
             color: Colors.black.withOpacity(0.5),
             width: 1.5,
           ),
         ),
         child: Row(
-          children: const [
+          children: [
             Expanded(
               child: Text(
-                "Selecione o arquivo referente ao seu comprovante de renda",
+                fileText,
               ),
             ),
-            Icon(Icons.arrow_forward, size: 18),
+            const Icon(Icons.arrow_forward, size: 18),
           ],
         ),
       ),
@@ -83,11 +120,6 @@ class _SelectFileWidget extends StatelessWidget {
   Future<void> _selectFile() async {
     final result = await FilePicker.platform.pickFiles();
 
-    if (result != null) {
-      return;
-    } else {
-      // Usuário cancelou a seleção do arquivo
-      return;
-    }
+    onFileSelected(result != null);
   }
 }

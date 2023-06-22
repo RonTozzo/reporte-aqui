@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'package:reporte_aqui/shared/app_bar.dart';
-import 'package:reporte_aqui/shared/app_routes.dart';
-import 'package:reporte_aqui/shared/button.dart';
-import 'package:reporte_aqui/shared/non_border_textfield.dart';
+import 'package:reporte_aqui/features/onboarding/repository/get_phone_token.dart';
+import 'package:reporte_aqui/shared/presentation/app_bar.dart';
+import 'package:reporte_aqui/shared/routes/app_routes.dart';
+import 'package:reporte_aqui/shared/presentation/button.dart';
+import 'package:reporte_aqui/shared/presentation/non_border_textfield.dart';
 
 class PhoneTokenPage extends StatefulWidget {
   const PhoneTokenPage({super.key});
@@ -13,6 +14,8 @@ class PhoneTokenPage extends StatefulWidget {
 }
 
 class _PhoneTokenPageState extends State<PhoneTokenPage> {
+  final token = GetPhoneTokenRepository.getPhoneToken();
+  List<String> errors = [];
   final _tokenFormatter = MaskTextInputFormatter(mask: "######");
   final _tokenController = TextEditingController();
 
@@ -42,14 +45,15 @@ class _PhoneTokenPageState extends State<PhoneTokenPage> {
                 formatter: _tokenFormatter,
                 controller: _tokenController,
                 hint: "******",
-                erros: const ["teste"],
+                erros: errors,
+                onChange: (_) {},
               ),
+              const SizedBox(height: 24),
+              Text(token, style: TextStyle(color: Colors.grey)),
               const Spacer(),
               Align(
                 child: AppButton(
-                  onTap: () {
-                    Navigator.of(context).pushNamed(AppRoutes.phoneNumberStep);
-                  },
+                  onTap: checkTokenAndNavigate,
                   label: "Confirmar",
                 ),
               ),
@@ -59,5 +63,17 @@ class _PhoneTokenPageState extends State<PhoneTokenPage> {
         ),
       ),
     );
+  }
+
+  void checkTokenAndNavigate() {
+    if (_tokenController.text == token) {
+      errors = [];
+      setState(() {});
+
+      Navigator.of(context).pushNamed(AppRoutes.home);
+    } else {
+      errors = ["Código inválido"];
+      setState(() {});
+    }
   }
 }

@@ -11,9 +11,9 @@ abstract class PhoneNumberValidator {
 
       final ddd = phoneNumber.substring(0, 2);
       if (validDDDs.contains(ddd)) {
-        return false; // O número de telefone é válido
+        return true; // O número de telefone é válido
       }
     }
-    return true;
+    return false;
   }
 }

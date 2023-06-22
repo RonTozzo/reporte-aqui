@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:reporte_aqui/shared/app_routes.dart';
-import 'package:reporte_aqui/shared/button.dart';
+import 'package:reporte_aqui/shared/routes/app_routes.dart';
+import 'package:reporte_aqui/shared/presentation/button.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});

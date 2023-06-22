@@ -4,4 +4,5 @@ abstract class AppRoutes {
   static const phoneToken = '/phoneToken';
   static const phoneNumberStep = '/phoneNumberStep';
   static const proofResidenceStep = '/profResidenceStep';
+  static const home = '/home';
 }
