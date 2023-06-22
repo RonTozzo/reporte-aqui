@@ -49,7 +49,7 @@ class _PhoneTokenPageState extends State<PhoneTokenPage> {
                 onChange: (_) {},
               ),
               const SizedBox(height: 24),
-              Text(token, style: TextStyle(color: Colors.grey)),
+              Text(token, style: const TextStyle(color: Colors.grey)),
               const Spacer(),
               Align(
                 child: AppButton(

@@ -83,7 +83,6 @@ class _SelectFileWidget extends StatelessWidget {
   final Function(bool) onFileSelected;
 
   const _SelectFileWidget({
-    super.key,
     required this.onFileSelected,
     required this.fileText,
     this.color,
